@@ -72,7 +72,7 @@ export default function FlagQuiz(props: { solution?: Country; rows: number, cols
         <Flag country={solution} rows={props.rows} cols={props.cols}/>
         <form onSubmit={handleSubmit}>
             <fieldset className="mb-3">
-                <legend>Guess the Country ({getAttemptsCount()}/{getAttemptsAllowedCount()})</legend>
+                <legend className="h5">Guess the Country ({getAttemptsCount()}/{getAttemptsAllowedCount()})</legend>
                 {!getIsFinished() ?
                     <QuizAnswerInput options={Object.values(Country).map(country => ({value: country, name: countryNames.of(country)!}))}/> :
                     <button onClick={restart} name="replay" className="btn btn-primary w-100">Play Again ↻</button>
