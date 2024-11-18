@@ -34,13 +34,6 @@ export default function FlagQuiz(props: { solution?: Country; rows: number, cols
             name: countryNames.of(answer)!,
             isCorrect: answer == solution,
         }]);
-
-        if (getIsSolved()) {
-            alert('Success!')
-        }
-        if (getIsFailed()) {
-            alert(`The correct answer was ${countryNames.of(solution)}`)
-        }
     }
 
     function restart() {
@@ -72,13 +65,18 @@ export default function FlagQuiz(props: { solution?: Country; rows: number, cols
         <Flag country={solution} rows={props.rows} cols={props.cols}/>
         <form onSubmit={handleSubmit}>
             <fieldset className="mb-3">
-                <legend className="h5">Guess the Country ({getAttemptsCount()}/{getAttemptsAllowedCount()})</legend>
+                <legend className="h5">
+                    {!getIsFailed() ?
+                        <>Guess the Country ({getAttemptsCount()}/{getAttemptsAllowedCount()})</>:
+                        countryNames.of(solution)
+                    }
+                </legend>
                 {!getIsFinished() ?
                     <QuizAnswerInput options={Object.values(Country).map(country => ({value: country, name: countryNames.of(country)!}))}/> :
                     <button onClick={restart} name="replay" className="btn btn-primary w-100">Play Again ↻</button>
                 }
             </fieldset>
-            <QuizAnswerHistory answers={history}/>
+            <QuizAnswerHistory answers={history} isFailed={getIsFailed()}/>
         </form>
     </>
 }
@@ -95,14 +93,14 @@ export function QuizAnswerInput(props: { options: { value: string; name: string 
     </div>
 }
 
-export function QuizAnswerHistory({answers}: { answers: IAnswer[] }) {
+export function QuizAnswerHistory({answers, isFailed=false}: { answers: IAnswer[], isFailed?: boolean }) {
     return <div className="container">{
-        answers.map(answer => <QuizAnswerHistoryItem answer={answer}/>)
+        answers.map(answer => <QuizAnswerHistoryItem answer={answer} isFailed={isFailed}/>)
     }</div>
 }
 
-export function QuizAnswerHistoryItem({answer}: { answer: IAnswer }) {
-    return <div className={`row ${answer.isCorrect ? 'bg-success' : 'bg-secondary'} rounded p-2 mb-1`} key={answer.key}>
+export function QuizAnswerHistoryItem({answer, isFailed=false}: { answer: IAnswer, isFailed?: boolean}) {
+    return <div className={`row ${answer.isCorrect ? 'bg-success' : isFailed ? 'bg-danger' : 'bg-secondary'} rounded p-2 mb-1`} key={answer.key}>
         <span className="col w-100">{answer.name}</span>
         <span className="col-auto">{answer.isCorrect ? '🟩' : '🟥'}</span>
     </div>
