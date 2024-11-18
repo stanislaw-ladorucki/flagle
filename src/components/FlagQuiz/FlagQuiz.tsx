@@ -29,6 +29,11 @@ export default function FlagQuiz(props: { solution?: Country; rows: number, cols
         if (getIsFinished() || !answer)
             return;
 
+        if (history.some(({key}) => key == answer)) {
+            alert(`You already guessed ${countryNames.of(answer)}`)
+            return;
+        }
+
         setHistory([...history, {
             key: answer,
             name: countryNames.of(answer)!,
