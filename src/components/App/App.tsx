@@ -2,10 +2,11 @@ import './App.css'
 import FlagQuiz from '../FlagQuiz';
 import {LanguageProvider} from "../../context/LanguageContext.tsx";
 import githubLogoWhite from '../../assets/github-mark-white.svg'
+import {Locale} from "../../constants/locale.ts";
 
 export default function App() {
     return (
-        <LanguageProvider>
+        <LanguageProvider language={navigator.language as Locale}>
             <main>
                 <h1 className="text-center">Flagle</h1>
                 <div id="flagle-card" className="card text-center">
